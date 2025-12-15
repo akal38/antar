@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مباراة عين عنتر vs البواطيط | دوري أبطال بوقايد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a1d2e 0%, #152a38 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* شاشة البداية الإشهارية */
+        .promo-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #2e7d32 50%, #4caf50 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            text-align: center;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        
+        .promo-screen.hidden {
+            transform: translateY(-100%);
+        }
+        
+        .promo-logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .promo-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .promo-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #FFD700, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        
+        .promo-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+        
+        .promo-date {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            color: #FFD700;
+            font-weight: 700;
+        }
+        
+        .promo-teams {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .promo-team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .promo-team-logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .promo-team-logo img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+        }
+        
+        .promo-vs {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #FFD700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
+        .promo-countdown {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px 0;
+            min-width: 300px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .promo-countdown-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        
+        .promo-countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .promo-countdown-box {
+            text-align: center;
+        }
+        
+        .promo-countdown-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            min-width: 70px;
+            margin-bottom: 5px;
+        }
+        
+        .promo-countdown-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .promo-start-btn {
+            background: linear-gradient(to right, #FFD700, #FFA500);
+            color: #1a472a;
+            border: none;
+            padding: 20px 60px;
+            font-size: 1.4rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            margin-top: 30px;
+            transition: all 0.4s;
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .promo-start-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* المحتوى الرئيسي */
+        .main-content {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s, transform 1s;
+        }
+        
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* رأس المباراة */
+        .match-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .match-title {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+        
+        .match-teams {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .team-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .team-logo img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+        
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .team-name.main {
+            color: #FFD700;
+        }
+        
+        .vs {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #FFD700;
+            padding: 0 15px;
+        }
+        
+        /* تفاصيل المباراة */
+        .match-details-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #FFD700;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .detail-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .detail-item i {
+            color: #FFD700;
+            font-size: 1.8rem;
+        }
+        
+        /* زر عرض التشكيلة */
+        .show-lineup-btn-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .show-lineup-btn {
+            background: linear-gradient(to right, #FFD700, #FFA500);
+            color: #1a472a;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .show-lineup-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* قائمة اللاعبين */
+        .players-list-section {
+            margin: 50px 0;
+            display: none;
+        }
+        
+        .players-list-section.active {
+            display: block;
+        }
+        
+        .players-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        
+        .player-list-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 18px 25px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            border-right: 5px solid #FFD700;
+        }
+        
+        .player-list-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-10px);
+        }
+        
+        .player-list-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .player-list-position {
+            font-size: 0.9rem;
+            color: #FFD700;
+            margin-top: 5px;
+        }
+        
+        .player-list-number {
+            background: #FFD700;
+            color: #1a472a;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+        
+        .reserve-players {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+        }
+        
+        .reserve-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-align: center;
+        }
+        
+        .reserve-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .reserve-player {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            transition: all 0.3s;
+        }
+        
+        .reserve-player:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        /* ملعب كرة القدم */
+        .pitch-section {
+            margin: 50px 0;
+            display: none;
+        }
+        
+        .pitch-section.active {
+            display: block;
+        }
+        
+        .pitch-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #FFD700;
+            font-weight: 700;
+        }
+        
+        .football-pitch-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .football-pitch {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(to bottom, #2e7d32 0%, #1b5e20 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* خطوط الملعب */
+        .pitch-line {
+            position: absolute;
+            border: 2px solid white;
+            opacity: 0.7;
+        }
+        
+        .center-line {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+        }
+        
+        .center-circle {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        .penalty-area {
+            width: 120px;
+            height: 300px;
+            border: 2px solid white;
+        }
+        
+        .penalty-area.left {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            border-right: none;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .penalty-area.right {
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            border-left: none;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .goal-area {
+            width: 50px;
+            height: 150px;
+            border: 2px solid white;
+        }
+        
+        .goal-area.left {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            border-right: none;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .goal-area.right {
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            border-left: none;
+            border-radius: 5px 0 0 5px;
+        }
+        
+        /* اللاعبين على الملعب */
+        .player-on-pitch {
+            position: absolute;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a472a, #2e7d32);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10;
+            cursor: pointer;
+            border: 3px solid #FFD700;
+            text-align: center;
+            padding: 5px;
+            opacity: 0;
+            animation: playerAppear 0.8s forwards;
+        }
+        
+        .player-on-pitch:hover {
+            transform: scale(1.15);
+            z-index: 20;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+        }
+        
+        .player-pitch-number {
+            font-size: 1.6rem;
+            color: #FFD700;
+            font-weight: 900;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .player-pitch-name {
+            font-size: 0.95rem;
+            line-height: 1.1;
+            height: 25px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 75px;
+            font-weight: 600;
+        }
+        
+        /* تشكيلة الفريق (6 لاعبين) - تم التصحيح */
+        #player-1 { 
+            top: 50%; 
+            left: 8%; 
+            background: linear-gradient(135deg, #8B0000, #B22222);
+            animation-delay: 0.1s;
+        } /* حارس - الحاج دحو */
+        
+        #player-2 { 
+            top: 25%; 
+            left: 30%; 
+            animation-delay: 0.2s;
+        } /* مدافع - عبد الله */
+        
+        #player-3 { 
+            top: 75%; 
+            left: 30%; 
+            animation-delay: 0.3s;
+        } /* مدافع - يوسف */
+        
+        #player-4 { 
+            top: 30%; 
+            left: 55%; 
+            animation-delay: 0.4s;
+        } /* وسط - عبد الإله */
+        
+        #player-5 { 
+            top: 70%; 
+            left: 55%; 
+            animation-delay: 0.5s;
+        } /* وسط - سفيان */
+        
+        #player-6 { 
+            top: 50%; 
+            left: 80%; 
+            animation-delay: 0.6s;
+        } /* مهاجم - عبد الحق */
+        
+        /* أزرار التنقل */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #FFD700;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background: #FFD700;
+            color: #1a472a;
+        }
+        
+        /* الأنيميشن */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes playerAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .animate-fade-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-slide-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        
+        .animate-slide-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        
+        /* تصميم متجاوب للهواتف */
+        @media (max-width: 768px) {
+            .promo-title {
+                font-size: 2.2rem;
+            }
+            
+            .promo-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .promo-date {
+                font-size: 1.1rem;
+            }
+            
+            .promo-team-logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .promo-vs {
+                font-size: 2rem;
+            }
+            
+            .promo-countdown {
+                padding: 20px;
+                min-width: 280px;
+            }
+            
+            .promo-countdown-value {
+                font-size: 1.8rem;
+                min-width: 60px;
+            }
+            
+            .promo-start-btn {
+                padding: 18px 40px;
+                font-size: 1.2rem;
+            }
+            
+            .match-title {
+                font-size: 1.8rem;
+            }
+            
+            .team-logo {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .team-name {
+                font-size: 1.1rem;
+            }
+            
+            .vs {
+                font-size: 1.6rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .detail-item {
+                padding: 12px;
+            }
+            
+            .player-list-item {
+                padding: 15px 20px;
+            }
+            
+            .player-list-name {
+                font-size: 1.1rem;
+            }
+            
+            .player-list-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .football-pitch {
+                height: 400px;
+            }
+            
+            .player-on-pitch {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .player-pitch-number {
+                font-size: 1.3rem;
+            }
+            
+            .player-pitch-name {
+                font-size: 0.8rem;
+            }
+            
+            .show-lineup-btn {
+                padding: 15px 30px;
+                font-size: 1.1rem;
+            }
+            
+            .reserve-player {
+                min-width: 130px;
+            }
+            
+            /* تعديل مواقع اللاعبين للهواتف */
+            #player-1 { top: 50%; left: 5%; }
+            #player-2 { top: 20%; left: 25%; }
+            #player-3 { top: 80%; left: 25%; }
+            #player-4 { top: 30%; left: 50%; }
+            #player-5 { top: 70%; left: 50%; }
+            #player-6 { top: 50%; left: 75%; }
+        }
+        
+        @media (max-width: 480px) {
+            .promo-title {
+                font-size: 1.8rem;
+            }
+            
+            .promo-teams {
+                gap: 20px;
+            }
+            
+            .promo-team-logo {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .promo-countdown-timer {
+                gap: 10px;
+            }
+            
+            .promo-countdown-value {
+                font-size: 1.6rem;
+                min-width: 50px;
+                padding: 8px;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .match-teams {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .vs {
+                padding: 10px 0;
+            }
+            
+            .football-pitch {
+                height: 350px;
+            }
+            
+            .player-on-pitch {
+                width: 65px;
+                height: 65px;
+            }
+            
+            .pitch-line {
+                border-width: 1.5px;
+            }
+            
+            .center-circle {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .penalty-area {
+                width: 90px;
+                height: 250px;
+            }
+            
+            .goal-area {
+                width: 40px;
+                height: 120px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 90%;
+                justify-content: center;
+            }
+            
+            .reserve-list {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .reserve-player {
+                width: 90%;
+            }
+            
+            /* تعديل مواقع اللاعبين على الهواتف الصغيرة */
+            #player-1 { top: 50%; left: 5%; }
+            #player-2 { top: 15%; left: 25%; }
+            #player-3 { top: 85%; left: 25%; }
+            #player-4 { top: 25%; left: 50%; }
+            #player-5 { top: 75%; left: 50%; }
+            #player-6 { top: 50%; left: 75%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة البداية الإشهارية -->
+    <div class="promo-screen" id="promoScreen">
+        <div class="promo-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/919/919847.png" alt="شعار دوري أبطال بوقايد">
+        </div>
+        
+        <h1 class="promo-title">دوري أبطال بوقايد</h1>
+        <p class="promo-subtitle">المواجهة النارية</p>
+        <p class="promo-date">الجمعة المقبل - 9:00 صباحاً</p>
+        
+        <div class="promo-teams">
+            <div class="promo-team">
+                <div class="promo-team-logo">
+                    <img src="https://cdn-icons-png.flaticon.com/512/919/919847.png" alt="عين عنتر">
+                </div>
+                <h3 style="color: #FFD700;">عين عنتر</h3>
+            </div>
+            
+            <div class="promo-vs">VS</div>
+            
+            <div class="promo-team">
+                <div class="promo-team-logo">
+                    <img src="https://cdn-icons-png.flaticon.com/512/919/919825.png" alt="البواطيط">
+                </div>
+                <h3>البواطيط</h3>
+            </div>
+        </div>
+        
+        <div class="promo-countdown">
+            <div class="promo-countdown-title">العد التنازلي للمباراة</div>
+            <div class="promo-countdown-timer">
+                <div class="promo-countdown-box">
+                    <div class="promo-countdown-value" id="promoDays">00</div>
+                    <div class="promo-countdown-label">أيام</div>
+                </div>
+                <div class="promo-countdown-box">
+                    <div class="promo-countdown-value" id="promoHours">00</div>
+                    <div class="promo-countdown-label">ساعات</div>
+                </div>
+                <div class="promo-countdown-box">
+                    <div class="promo-countdown-value" id="promoMinutes">00</div>
+                    <div class="promo-countdown-label">دقائق</div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="promo-start-btn" id="promoStartBtn">
+            <i class="fas fa-play-circle"></i> ابدأ المشاهدة
+        </button>
+    </div>
+    
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content" id="mainContent">
+        <!-- رأس المباراة -->
+        <div class="match-header">
+            <h2 class="match-title">دوري أبطال بوقايد</h2>
+            
+            <div class="match-teams">
+                <div class="team animate-slide-left">
+                    <div class="team-logo">
+                        <img src="https://cdn-icons-png.flaticon.com/512/919/919847.png" alt="عين عنتر">
+                    </div>
+                    <h3 class="team-name main">عين عنتر</h3>
+                </div>
+                
+                <div class="vs">VS</div>
+                
+                <div class="team animate-slide-right">
+                    <div class="team-logo">
+                        <img src="https://cdn-icons-png.flaticon.com/512/919/919825.png" alt="البواطيط">
+                    </div>
+                    <h3 class="team-name">البواطيط</h3>
+                </div>
+            </div>
+        </div>
+        
+        <!-- تفاصيل المباراة -->
+        <div class="match-details-container">
+            <h3 class="section-title">تفاصيل المباراة</h3>
+            
+            <div class="details-grid">
+                <div class="detail-item animate-fade-up" style="animation-delay: 0.1s">
+                    <i class="far fa-calendar-alt"></i>
+                    <div>
+                        <h4>الجمعة المقبل</h4>
+                        <p>يوم المباراة</p>
+                    </div>
+                </div>
+                
+                <div class="detail-item animate-fade-up" style="animation-delay: 0.2s">
+                    <i class="far fa-clock"></i>
+                    <div>
+                        <h4>9:00 صباحاً</h4>
+                        <p>توقيت المباراة</p>
+                    </div>
+                </div>
+                
+                <div class="detail-item animate-fade-up" style="animation-delay: 0.3s">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h4>ملعب عين عنتر بوقايد</h4>
+                        <p>مكان المباراة</p>
+                    </div>
+                </div>
+                
+                <div class="detail-item animate-fade-up" style="animation-delay: 0.4s">
+                    <i class="fas fa-trophy"></i>
+                    <div>
+                        <h4>دوري أبطال بوقايد</h4>
+                        <p>البطولة</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- زر عرض التشكيلة -->
+            <div class="show-lineup-btn-container">
+                <button class="show-lineup-btn" id="showLineupBtn">
+                    <i class="fas fa-users"></i> عرض تشكيلة فريق عين عنتر
+                </button>
+            </div>
+        </div>
+        
+        <!-- قائمة اللاعبين -->
+        <div class="players-list-section" id="playersListSection">
+            <h3 class="section-title">تشكيلة فريق عين عنتر الأساسية</h3>
+            <div class="players-list" id="playersList">
+                <!-- سيتم إضافة اللاعبين الأساسيين هنا -->
+            </div>
+            
+            <!-- قائمة الاحتياط -->
+            <div class="reserve-players">
+                <h4 class="reserve-title">اللاعبين الاحتياطيين</h4>
+                <div class="reserve-list" id="reserveList">
+                    <!-- سيتم إضافة اللاعبين الاحتياطيين هنا -->
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" id="showPitchBtn">
+                    <i class="fas fa-futbol"></i> عرض التشكيلة على الملعب
+                </button>
+                <button class="nav-btn" id="backToDetailsBtn">
+                    <i class="fas fa-arrow-right"></i> العودة للتفاصيل
+                </button>
+            </div>
+        </div>
+        
+        <!-- ملعب كرة القدم -->
+        <div class="pitch-section" id="pitchSection">
+            <h3 class="pitch-title">تشكيلة فريق عين عنتر على أرض الملعب</h3>
+            
+            <div class="football-pitch-container">
+                <div class="football-pitch" id="footballPitch">
+                    <!-- خطوط الملعب -->
+                    <div class="pitch-line center-line"></div>
+                    <div class="pitch-line center-circle"></div>
+                    <div class="pitch-line penalty-area left"></div>
+                    <div class="pitch-line penalty-area right"></div>
+                    <div class="pitch-line goal-area left"></div>
+                    <div class="pitch-line goal-area right"></div>
+                    
+                    <!-- اللاعبون على الملعب -->
+                    <!-- سيتم إضافة اللاعبين هنا -->
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" id="backToListBtn">
+                    <i class="fas fa-list"></i> العودة للقائمة
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // بيانات اللاعبين الأساسيين
+        const mainPlayers = [
+            { id: 1, name: "الحاج دحو", number: 1, position: "حارس مرمى", shortName: "الحاج دحو" },
+            { id: 2, name: "عبد الله", number: 2, position: "مدافع", shortName: "عبد الله" },
+            { id: 3, name: "يوسف", number: 3, position: "مدافع", shortName: "يوسف" },
+            { id: 4, name: "عبد الإله", number: 4, position: "وسط", shortName: "عبد الإله" },
+            { id: 5, name: "سفيان", number: 5, position: "وسط", shortName: "سفيان" },
+            { id: 6, name: "عبد الحق", number: 6, position: "مهاجم", shortName: "عبد الحق" }
+        ];
+        
+        // بيانات اللاعبين الاحتياطيين
+        const reservePlayers = [
+            { id: 7, name: "سيف الدين", number: 7, position: "احتياط", shortName: "سيف الدين" },
+            { id: 8, name: "محمد أمين", number: 8, position: "احتياط", shortName: "محمد أمين" }
+        ];
+        
+        // تاريخ المباراة (الجمعة المقبل الساعة 9 صباحاً)
+        const getNextFriday = () => {
+            const now = new Date();
+            const day = now.getDay(); // 0 = الأحد, 1 = الإثنين, ..., 5 = الجمعة
+            let daysUntilFriday = 5 - day;
+            
+            if (daysUntilFriday <= 0) {
+                daysUntilFriday += 7; // الجمعة القادمة
+            }
+            
+            const nextFriday = new Date(now);
+            nextFriday.setDate(now.getDate() + daysUntilFriday);
+            nextFriday.setHours(9, 0, 0, 0); // الساعة 9 صباحاً
+            
+            return nextFriday;
+        };
+        
+        const matchDate = getNextFriday().getTime();
+        
+        // عناصر DOM
+        const promoScreen = document.getElementById('promoScreen');
+        const promoStartBtn = document.getElementById('promoStartBtn');
+        const mainContent = document.getElementById('mainContent');
+        const showLineupBtn = document.getElementById('showLineupBtn');
+        const playersListSection = document.getElementById('playersListSection');
+        const playersList = document.getElementById('playersList');
+        const reserveList = document.getElementById('reserveList');
+        const pitchSection = document.getElementById('pitchSection');
+        const footballPitch = document.getElementById('footballPitch');
+        const showPitchBtn = document.getElementById('showPitchBtn');
+        const backToDetailsBtn = document.getElementById('backToDetailsBtn');
+        const backToListBtn = document.getElementById('backToListBtn');
+        
+        // العد التنازلي لشاشة البداية
+        function updatePromoCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = matchDate - now;
+            
+            if (timeLeft < 0) {
+                const nextMatchDate = getNextFriday();
+                nextMatchDate.setDate(nextMatchDate.getDate() + 7);
+                const nextMatchTime = nextMatchDate.getTime();
+                const nextTimeLeft = nextMatchTime - now;
+                
+                updateCountdownDisplay(nextTimeLeft);
+                return;
+            }
+            
+            updateCountdownDisplay(timeLeft);
+        }
+        
+        function updateCountdownDisplay(timeLeft) {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            
+            document.getElementById('promoDays').textContent = days.toString().padStart(2, '0');
+            document.getElementById('promoHours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('promoMinutes').textContent = minutes.toString().padStart(2, '0');
+        }
+        
+        // تحديث العد التنازلي كل دقيقة
+        setInterval(updatePromoCountdown, 60000);
+        updatePromoCountdown();
+        
+        // عرض قائمة اللاعبين الأساسيين
+        function renderMainPlayersList() {
+            playersList.innerHTML = '';
+            
+            mainPlayers.forEach((player, index) => {
+                const playerItem = document.createElement('div');
+                playerItem.className = 'player-list-item animate-fade-up';
+                playerItem.style.animationDelay = `${index * 0.1}s`;
+                
+                playerItem.innerHTML = `
+                    <div>
+                        <div class="player-list-name">${player.name}</div>
+                        <div class="player-list-position">${player.position}</div>
+                    </div>
+                    <div class="player-list-number">${player.number}</div>
+                `;
+                
+                playersList.appendChild(playerItem);
+            });
+        }
+        
+        // عرض قائمة اللاعبين الاحتياطيين
+        function renderReservePlayersList() {
+            reserveList.innerHTML = '';
+            
+            reservePlayers.forEach((player, index) => {
+                const playerItem = document.createElement('div');
+                playerItem.className = 'reserve-player animate-fade-up';
+                playerItem.style.animationDelay = `${index * 0.1 + 0.6}s`;
+                
+                playerItem.innerHTML = `
+                    <div style="font-weight: 600; font-size: 1.1rem;">${player.name}</div>
+                    <div style="color: #FFD700; margin-top: 5px;">${player.position}</div>
+                    <div style="background: #FFD700; color: #1a472a; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; margin: 10px auto 0;">${player.number}</div>
+                `;
+                
+                reserveList.appendChild(playerItem);
+            });
+        }
+        
+        // عرض اللاعبين على الملعب - الإصلاح الكامل
+        function renderPlayersOnPitch() {
+            console.log("=== بدء عرض اللاعبين على الملعب ===");
+            
+            // مسح محتوى الملعب القديم
+            footballPitch.innerHTML = `
+                <!-- خطوط الملعب -->
+                <div class="pitch-line center-line"></div>
+                <div class="pitch-line center-circle"></div>
+                <div class="pitch-line penalty-area left"></div>
+                <div class="pitch-line penalty-area right"></div>
+                <div class="pitch-line goal-area left"></div>
+                <div class="pitch-line goal-area right"></div>
+            `;
+            
+            console.log(`عدد اللاعبين للعرض: ${mainPlayers.length}`);
+            
+            // إضافة كل لاعب على الملعب
+            mainPlayers.forEach((player, index) => {
+                console.log(`إضافة اللاعب ${index + 1}: ${player.name} (${player.shortName})`);
+                
+                const playerElement = document.createElement('div');
+                playerElement.className = 'player-on-pitch';
+                playerElement.id = `player-${player.id}`;
+                playerElement.innerHTML = `
+                    <div class="player-pitch-number">${player.number}</div>
+                    <div class="player-pitch-name">${player.shortName}</div>
+                `;
+                
+                // إضافة معلومات إضافية عند التمرير
+                playerElement.title = `${player.name} - ${player.position}`;
+                
+                // تحديد الأنيميشن لكل لاعب
+                playerElement.style.animationDelay = `${index * 0.1}s`;
+                
+                // إضافة اللاعب إلى الملعب
+                footballPitch.appendChild(playerElement);
+                
+                console.log(`تمت إضافة اللاعب: ${player.name}`);
+            });
+            
+            // التأكد من ظهور جميع اللاعبين
+            setTimeout(() => {
+                const playerElements = document.querySelectorAll('.player-on-pitch');
+                console.log(`عدد عناصر اللاعبين التي تم إضافتها: ${playerElements.length}`);
+                
+                playerElements.forEach((element, idx) => {
+                    const nameElement = element.querySelector('.player-pitch-name');
+                    const numberElement = element.querySelector('.player-pitch-number');
+                    if (nameElement && numberElement) {
+                        console.log(`✅ اللاعب ${idx + 1}: ${numberElement.textContent} - ${nameElement.textContent}`);
+                    } else {
+                        console.log(`❌ مشكلة في اللاعب ${idx + 1}`);
+                    }
+                });
+                
+                // التحقق من المواقع
+                console.log("التحقق من مواقع اللاعبين:");
+                playerElements.forEach((element, idx) => {
+                    console.log(`اللاعب ${idx + 1}: top=${element.style.top}, left=${element.style.left}`);
+                });
+            }, 500);
+        }
+        
+        // أحداث الأزرار
+        promoStartBtn.addEventListener('click', () => {
+            promoScreen.classList.add('hidden');
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+            }, 800);
+        });
+        
+        showLineupBtn.addEventListener('click', () => {
+            console.log("زر عرض التشكيلة - تم النقر");
+            playersListSection.classList.add('active');
+            pitchSection.classList.remove('active');
+            renderMainPlayersList();
+            renderReservePlayersList();
+            setTimeout(() => {
+                playersListSection.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        });
+        
+        showPitchBtn.addEventListener('click', () => {
+            console.log("زر عرض الملعب - تم النقر");
+            playersListSection.classList.remove('active');
+            pitchSection.classList.add('active');
+            renderPlayersOnPitch();
+            setTimeout(() => {
+                pitchSection.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        });
+        
+        backToDetailsBtn.addEventListener('click', () => {
+            playersListSection.classList.remove('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        backToListBtn.addEventListener('click', () => {
+            pitchSection.classList.remove('active');
+            playersListSection.classList.add('active');
+            setTimeout(() => {
+                playersListSection.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        });
+        
+        // تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("=== الصفحة تم تحميلها بنجاح ===");
+            console.log("اسم الفريق: عين عنتر");
+            console.log("عدد اللاعبين الأساسيين: " + mainPlayers.length);
+            console.log("عدد اللاعبين الاحتياطيين: " + reservePlayers.length);
+            
+            // إضافة تأثيرات للعناصر عند تحميل الصفحة
+            setTimeout(() => {
+                document.querySelector('.promo-title').classList.add('animate-fade-up');
+                document.querySelector('.promo-subtitle').classList.add('animate-fade-up');
+                document.querySelector('.promo-date').classList.add('animate-fade-up');
+                
+                const teamLogos = document.querySelectorAll('.promo-team');
+                teamLogos[0].classList.add('animate-slide-left');
+                teamLogos[1].classList.add('animate-slide-right');
+                
+                document.querySelector('.promo-countdown').classList.add('animate-fade-up');
+                promoStartBtn.classList.add('animate-fade-up');
+            }, 300);
+            
+            // اختبار مباشر عند تحميل الصفحة
+            setTimeout(() => {
+                console.log("=== اختبار التشكيلة ===");
+                renderPlayersOnPitch();
+            }, 1000);
+        });
+        
+        // تحسين الأداء على الهواتف
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // اختبار مباشر عند تحميل الصفحة
+        window.onload = function() {
+            console.log("=== معلومات التشكيلة الكاملة ===");
+            console.log("فريق: عين عنتر");
+            console.log("الملعب: ملعب عين عنتر بوقايد");
+            console.log("التاريخ: الجمعة المقبل - 9:00 صباحاً");
+            console.log("الخصم: البواطيط");
+            console.log("البطولة: دوري أبطال بوقايد");
+            console.log("");
+            console.log("=== التشكيلة الأساسية ===");
+            mainPlayers.forEach(player => {
+                console.log(`  ${player.number}. ${player.name} - ${player.position}`);
+            });
+            console.log("");
+            console.log("=== الاحتياط ===");
+            reservePlayers.forEach(player => {
+                console.log(`  ${player.number}. ${player.name} - ${player.position}`);
+            });
+            console.log("");
+            console.log("=== التعليمات ===");
+            console.log("1. اضغط على 'ابدأ المشاهدة' للبدء");
+            console.log("2. اضغط على 'عرض تشكيلة فريق عين عنتر' لرؤية القائمة");
+            console.log("3. اضغط على 'عرض التشكيلة على الملعب' لرؤية اللاعبين على الملعب");
+        };
+    </script>
+</body>
+</html>
